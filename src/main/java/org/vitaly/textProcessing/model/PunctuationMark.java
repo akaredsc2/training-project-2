@@ -1,16 +1,21 @@
 package org.vitaly.textProcessing.model;
 
+import static org.vitaly.textProcessing.util.InputChecker.SYMBOL;
+import static org.vitaly.textProcessing.util.InputChecker.requireNonNull;
+
 /**
  * Created by vitaly on 2017-03-19.
  */
 public class PunctuationMark implements Token {
     public static final String END_OF_SENTENCE_REGEX = "[.!?]";
-    public static final String NOT_END_OF_SENTENCE_PUNCTUATION_REGEX = "[:;\\-\\(\\)\\[\\]`]";
+    public static final String NOT_END_OF_SENTENCE_PUNCTUATION_REGEX = "[:;,\\-\\(\\)\\[\\]`]";
     public static final String PUNCTUATION_REGEX = END_OF_SENTENCE_REGEX + "|" + NOT_END_OF_SENTENCE_PUNCTUATION_REGEX;
 
     private final Symbol symbol;
 
     public PunctuationMark(Symbol symbol) {
+        requireNonNull(symbol, SYMBOL);
+
         this.symbol = symbol;
     }
 

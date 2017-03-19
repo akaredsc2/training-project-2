@@ -1,10 +1,12 @@
 package org.vitaly.textProcessing.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
+
+import static org.vitaly.textProcessing.util.InputChecker.requireNonEmptyList;
+import static org.vitaly.textProcessing.util.InputChecker.requireNonNull;
 
 /**
  * Created by vitaly on 2017-03-19.
@@ -13,13 +15,16 @@ public class Sentence {
     private List<Token> tokenList;
 
     public Sentence(List<Token> tokenList) {
+        requireNonEmptyList(tokenList, "Token list");
+
         this.tokenList = tokenList;
     }
 
-    public Sentence replaceTokensMatchingPredicate(Predicate<Token> predicate, Token substitute) {
-        List<Token> newSentenceTokens = new ArrayList<>(tokenList.size());
+    public Sentence replaceTokens(Predicate<Token> predicate, Token substitute) {
+        requireNonNull(predicate, "Predicate");
+        requireNonNull(substitute, "Substitute");
 
-        Collections.copy(newSentenceTokens, this.tokenList);
+        List<Token> newSentenceTokens = new ArrayList<>(tokenList);
 
         for (int i = 0; i < newSentenceTokens.size(); i += 1) {
             if (predicate.test(newSentenceTokens.get(i))) {
@@ -28,6 +33,10 @@ public class Sentence {
         }
 
         return new Sentence(newSentenceTokens);
+    }
+
+    public List<Token> getTokenList() {
+        return new ArrayList<>(tokenList);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package org.vitaly.textProcessing.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.vitaly.textProcessing.util.InputChecker.requireNonEmptyList;
 
 /**
  * Created by vitaly on 2017-03-19.
@@ -9,7 +12,13 @@ public class Word implements Token {
     private final List<Symbol> symbolList;
 
     public Word(List<Symbol> symbolList) {
+        requireNonEmptyList(symbolList, "Symbol list");
+
         this.symbolList = symbolList;
+    }
+
+    public List<Symbol> getSymbolList() {
+        return new ArrayList<>(symbolList);
     }
 
     @Override
@@ -29,8 +38,12 @@ public class Word implements Token {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Word word = (Word) o;
 
