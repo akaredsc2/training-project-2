@@ -41,4 +41,13 @@ public class Word implements Token {
     public int hashCode() {
         return symbolList != null ? symbolList.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Symbol symbol : symbolList) {
+            builder.append(symbol.getValue());
+        }
+        return builder.toString();
+    }
 }

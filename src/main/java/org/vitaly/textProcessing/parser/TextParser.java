@@ -1,37 +1,44 @@
 package org.vitaly.textProcessing.parser;
 
-import org.vitaly.textProcessing.model.PunctuationMark;
 import org.vitaly.textProcessing.model.Sentence;
 import org.vitaly.textProcessing.model.Text;
+import org.vitaly.textProcessing.model.Token;
+import org.vitaly.textProcessing.model.TokenFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.vitaly.textProcessing.model.PunctuationMark.*;
+import static org.vitaly.textProcessing.model.PunctuationMark.END_OF_SENTENCE_REGEX;
+import static org.vitaly.textProcessing.model.PunctuationMark.PUNCTUATION_REGEX;
 
 /**
  * Created by vitaly on 2017-03-19.
  */
 public class TextParser {
+    private TokenFactory factory;
+
+    public TextParser() {
+        factory = new TokenFactory();
+    }
+
     public Text parseText(String string) {
-        List<String> sentenceStrings = splitSavingSplitter(string, END_OF_SENTENCE_REGEX,
+        List<String> sentenceStrings = splitTokenStrings(string, END_OF_SENTENCE_REGEX,
                 new AppendToCurrentTokenStrategy());
-        System.out.println(sentenceStrings);
 
         String whitespaceRegex = "\\s+";
         String punctuationAndWhitespaceRegex = PUNCTUATION_REGEX + "|" + whitespaceRegex;
 
-        List<List<String>> collect = sentenceStrings.stream()
-                .map(x -> splitSavingSplitter(x, punctuationAndWhitespaceRegex, new SaveAsSeparateTokenStrategy()))
+        List<Sentence> sentenceList = sentenceStrings.stream()
+                .map(x -> splitTokenStrings(x, punctuationAndWhitespaceRegex, new SaveAsSeparateTokenStrategy()))
+                .map(this::parseSentenceTokens)
+                .map(Sentence::new)
                 .collect(Collectors.toList());
 
-        System.out.println(collect);
-
-        return null;
+        return new Text(sentenceList);
     }
 
-    private List<String> splitSavingSplitter(String string, String regex, SavingStrategy savingStrategy) {
+    private List<String> splitTokenStrings(String string, String regex, SavingStrategy savingStrategy) {
         String leftover = string;
         String[] splitResult = leftover.split(regex, 2);
 
@@ -53,7 +60,21 @@ public class TextParser {
         return result;
     }
 
+    public List<Token> parseSentenceTokens(List<String> stringList) {
+        return stringList.stream()
+                .map(this::parseToken)
+                .collect(Collectors.toList());
+    }
+
+    public Token parseToken(String token) {
+        return token.matches(PUNCTUATION_REGEX) ? factory.createPunctuation(token) : factory.createWord(token);
+    }
+
+
     public static void main(String[] args) {
-        new TextParser().parseText("a- bsdfsd-gfhfg c. (d) e- f! g h -i? j- k l");
+        System.out.println(
+                new TextParser().parseText(
+                        "16. В некотором предложении текста слова заданной длины заменить указанной подстрокой, " +
+                                "длина которой может не совпадать с длиной слова."));
     }
 }

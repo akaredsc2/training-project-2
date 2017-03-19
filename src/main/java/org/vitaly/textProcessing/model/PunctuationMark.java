@@ -28,4 +28,9 @@ public class PunctuationMark implements Token {
     public int getLength() {
         return 1;
     }
+
+    @Override
+    public String toString() {
+        return symbol.getValue();
+    }
 }

@@ -3,6 +3,7 @@ package org.vitaly.textProcessing.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
 
 /**
@@ -13,10 +14,6 @@ public class Sentence {
 
     public Sentence(List<Token> tokenList) {
         this.tokenList = tokenList;
-    }
-
-    public List<Token> getTokenList() {
-        return tokenList;
     }
 
     public Sentence replaceTokensMatchingPredicate(Predicate<Token> predicate, Token substitute) {
@@ -31,5 +28,14 @@ public class Sentence {
         }
 
         return new Sentence(newSentenceTokens);
+    }
+
+    @Override
+    public String toString() {
+        StringJoiner joiner = new StringJoiner(" ");
+        for (Token token : tokenList) {
+            joiner.add(token.toString());
+        }
+        return joiner.toString();
     }
 }

@@ -8,14 +8,8 @@ import java.util.stream.Collectors;
  * Created by vitaly on 2017-03-19.
  */
 public class TokenFactory {
-    private String notWhitespaceRegex;
-
-    public TokenFactory() {
-        this.notWhitespaceRegex = "[^-\\s]";
-    }
-
     public Token createWord(String string) {
-        String[] symbolStrings = string.split(notWhitespaceRegex);
+        String[] symbolStrings = string.split("");
 
         List<Symbol> symbolList = Arrays.stream(symbolStrings)
                 .map(Symbol::new)
