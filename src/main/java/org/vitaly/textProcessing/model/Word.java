@@ -2,6 +2,7 @@ package org.vitaly.textProcessing.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.vitaly.textProcessing.util.InputChecker.requireNonEmptyList;
 
@@ -13,6 +14,12 @@ public class Word implements Token {
 
     public Word(List<Symbol> symbolList) {
         requireNonEmptyList(symbolList, "Symbol list");
+        for (Symbol symbol : symbolList) {
+            String symbolValue = symbol.getValue();
+            if (symbolValue.matches("\\s+") || symbolValue.matches(PunctuationMark.PUNCTUATION_REGEX)) {
+                throw new IllegalArgumentException("Word must not contain whitespaces or punctuation marks!");
+            }
+        }
 
         this.symbolList = symbolList;
     }
@@ -38,29 +45,23 @@ public class Word implements Token {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Word word = (Word) o;
 
-        return symbolList != null ? symbolList.equals(word.symbolList) : word.symbolList == null;
+        return symbolList.equals(word.symbolList);
     }
 
     @Override
     public int hashCode() {
-        return symbolList != null ? symbolList.hashCode() : 0;
+        return symbolList.hashCode();
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (Symbol symbol : symbolList) {
-            builder.append(symbol.getValue());
-        }
-        return builder.toString();
+        return symbolList.stream()
+                .map(Symbol::getValue)
+                .collect(Collectors.joining());
     }
 }

@@ -1,7 +1,6 @@
 package org.vitaly.textProcessing.model;
 
-import static org.vitaly.textProcessing.util.InputChecker.SYMBOL;
-import static org.vitaly.textProcessing.util.InputChecker.requireNonNull;
+import static org.vitaly.textProcessing.util.InputChecker.*;
 
 /**
  * Created by vitaly on 2017-03-19.
@@ -15,6 +14,7 @@ public class PunctuationMark implements Token {
 
     public PunctuationMark(Symbol symbol) {
         requireNonNull(symbol, SYMBOL);
+        requirePunctuation(symbol.getValue());
 
         this.symbol = symbol;
     }

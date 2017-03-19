@@ -27,6 +27,13 @@ public class InputChecker {
         }
     }
 
+    public static void requireStringWithOfLengthOne(String string, String stringDescription) {
+        requireNonEmptyString(string, stringDescription);
+        if (string.length() != 1) {
+            throw new IllegalArgumentException(stringDescription + " must be string with length of 1!");
+        }
+    }
+
     public static void requireNonEmptyList(List list, String listDescription) {
         requireNonNull(list, listDescription);
         if (list.isEmpty()) {

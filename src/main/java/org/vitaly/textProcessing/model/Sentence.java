@@ -2,8 +2,8 @@ package org.vitaly.textProcessing.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.vitaly.textProcessing.util.InputChecker.requireNonEmptyList;
 import static org.vitaly.textProcessing.util.InputChecker.requireNonNull;
@@ -41,10 +41,8 @@ public class Sentence {
 
     @Override
     public String toString() {
-        StringJoiner joiner = new StringJoiner(" ");
-        for (Token token : tokenList) {
-            joiner.add(token.toString());
-        }
-        return joiner.toString();
+        return tokenList.stream()
+                .map(Token::toString)
+                .collect(Collectors.joining(" "));
     }
 }

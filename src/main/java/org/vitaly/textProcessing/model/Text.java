@@ -2,7 +2,7 @@ package org.vitaly.textProcessing.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import static org.vitaly.textProcessing.util.InputChecker.*;
 
@@ -43,10 +43,8 @@ public class Text {
 
     @Override
     public String toString() {
-        StringJoiner joiner = new StringJoiner(" ");
-        for (Sentence sentence : sentenceList) {
-            joiner.add(sentence.toString());
-        }
-        return joiner.toString();
+        return sentenceList.stream()
+                .map(Sentence::toString)
+                .collect(Collectors.joining(" "));
     }
 }
