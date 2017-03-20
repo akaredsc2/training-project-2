@@ -55,4 +55,9 @@ public class PunctuationMarkTest {
         Symbol nonPunctuationSymbol = new Symbol(nonPunctuationValue);
         new PunctuationMark(nonPunctuationSymbol);
     }
+
+    @Test
+    public void punctuationMarkToStringReturnsSymbolValue() throws Exception {
+        assertThat(punctuationMark.toString(), equalTo(punctuationSymbol.getValue()));
+    }
 }

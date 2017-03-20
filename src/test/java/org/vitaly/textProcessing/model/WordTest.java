@@ -17,13 +17,12 @@ import static org.junit.Assert.*;
  * Created by vitaly on 2017-03-19.
  */
 public class WordTest {
-    private List<String> stringValues;
     private List<Symbol> symbols;
     private Word word;
 
     @Before
     public void setUp() throws Exception {
-        stringValues = new ArrayList<>();
+        List<String> stringValues = new ArrayList<>();
         Collections.addAll(stringValues, "a", "b", "c", "d", "e", "f");
         symbols = stringValues.stream()
                 .map(Symbol::new)
@@ -32,22 +31,13 @@ public class WordTest {
     }
 
     @Test
-    public void getSymbolListReturnsNewInstanceEachCall() throws Exception {
+    public void getSymbolListReturnsNewInstance() throws Exception {
         List<Symbol> firstCallList = word.getSymbolList();
         List<Symbol> secondCallList = word.getSymbolList();
 
         assertThat(firstCallList, allOf(
                 equalTo(secondCallList),
                 not(sameInstance(secondCallList))));
-    }
-
-    @Test
-    public void modifyingSymbolListDoesNotAffectWordSymbolList() throws Exception {
-        List<Symbol> symbolList = word.getSymbolList();
-
-        symbolList.clear();
-
-        assertThat(symbolList, not(equalTo(word.getSymbolList())));
     }
 
     @Test
