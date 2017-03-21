@@ -17,7 +17,7 @@ public class Sentence {
     public Sentence(List<Token> tokenList) {
         requireNonEmptyList(tokenList, "Token list");
 
-        this.tokenList = tokenList;
+        this.tokenList = new ArrayList<>(tokenList);
     }
 
     public Sentence replaceTokens(Predicate<Token> predicate, Token substitute) {

@@ -14,7 +14,7 @@ public class PunctuationMark implements Token {
 
     public PunctuationMark(Symbol symbol) {
         requireNonNull(symbol, SYMBOL);
-        requirePunctuation(symbol.getValue());
+        requirePunctuation(symbol.toString());
 
         this.symbol = symbol;
     }
@@ -36,6 +36,6 @@ public class PunctuationMark implements Token {
 
     @Override
     public String toString() {
-        return symbol.getValue();
+        return symbol.toString();
     }
 }

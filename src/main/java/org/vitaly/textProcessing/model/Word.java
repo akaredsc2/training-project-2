@@ -14,14 +14,15 @@ public class Word implements Token {
 
     public Word(List<Symbol> symbolList) {
         requireNonEmptyList(symbolList, "Symbol list");
+
         for (Symbol symbol : symbolList) {
-            String symbolValue = symbol.getValue();
+            String symbolValue = symbol.toString();
             if (symbolValue.matches("\\s+") || symbolValue.matches(PunctuationMark.PUNCTUATION_REGEX)) {
                 throw new IllegalArgumentException("Word must not contain whitespaces or punctuation marks!");
             }
         }
 
-        this.symbolList = symbolList;
+        this.symbolList = new ArrayList<>(symbolList);
     }
 
     public List<Symbol> getSymbolList() {
@@ -45,8 +46,12 @@ public class Word implements Token {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Word word = (Word) o;
 
@@ -61,7 +66,7 @@ public class Word implements Token {
     @Override
     public String toString() {
         return symbolList.stream()
-                .map(Symbol::getValue)
+                .map(Symbol::toString)
                 .collect(Collectors.joining());
     }
 }

@@ -15,7 +15,7 @@ public class Text {
     public Text(List<Sentence> sentenceList) {
         requireNonEmptyList(sentenceList, "Sentence list");
 
-        this.sentenceList = sentenceList;
+        this.sentenceList = new ArrayList<>(sentenceList);
     }
 
     public List<Sentence> getSentenceList() {
@@ -27,6 +27,8 @@ public class Text {
     }
 
     public Sentence getSentenceByNumber(int number) {
+        requireInRange(number, 0, sentenceList.size(), "Sentence number");
+
         return sentenceList.get(number);
     }
 

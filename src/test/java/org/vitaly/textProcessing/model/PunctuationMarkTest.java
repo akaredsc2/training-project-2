@@ -41,7 +41,7 @@ public class PunctuationMarkTest {
 
     @Test
     public void punctuationMarkToStringIsEqualToPunctuationSymbolValue() throws Exception {
-        assertThat(punctuationMark.toString(), equalTo(punctuationSymbol.getValue()));
+        assertThat(punctuationMark.toString(), equalTo(punctuationSymbol.toString()));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -54,10 +54,5 @@ public class PunctuationMarkTest {
         String nonPunctuationValue = "a";
         Symbol nonPunctuationSymbol = new Symbol(nonPunctuationValue);
         new PunctuationMark(nonPunctuationSymbol);
-    }
-
-    @Test
-    public void punctuationMarkToStringReturnsSymbolValue() throws Exception {
-        assertThat(punctuationMark.toString(), equalTo(punctuationSymbol.getValue()));
     }
 }

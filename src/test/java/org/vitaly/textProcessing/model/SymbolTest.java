@@ -14,7 +14,7 @@ public class SymbolTest {
         String symbolValue = " ";
         Symbol symbol = new Symbol(symbolValue);
 
-        assertThat(symbol.getValue(), equalTo(symbolValue));
+        assertThat(symbol.toString(), equalTo(symbolValue));
     }
 
     @Test(expected = IllegalArgumentException.class)

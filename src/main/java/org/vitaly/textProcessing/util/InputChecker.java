@@ -43,7 +43,7 @@ public class InputChecker {
 
     public static void requireInRange(int number, int from, int to, String numberDescription) {
         if (number < from || number >= to) {
-            throw new IllegalArgumentException(
+            throw new IndexOutOfBoundsException(
                     numberDescription + "must be between " + from + " inclusive and " + to + " exclusive!");
         }
     }

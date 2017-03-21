@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,9 +22,7 @@ public class WordTest {
 
     @Before
     public void setUp() throws Exception {
-        List<String> stringValues = new ArrayList<>();
-        Collections.addAll(stringValues, "a", "b", "c", "d", "e", "f");
-        symbols = stringValues.stream()
+        symbols = Stream.of("a", "b", "c", "d", "e", "f")
                 .map(Symbol::new)
                 .collect(Collectors.toList());
         word = new Word(symbols);
@@ -46,7 +44,7 @@ public class WordTest {
     }
 
     @Test
-    public void wordIsAlwaysWord() throws Exception {
+    public void wordIsWord() throws Exception {
         assertTrue(word.isWord());
     }
 
@@ -72,11 +70,11 @@ public class WordTest {
     }
 
     @Test
-    public void wordToStringReturnsConcatenatedSymbolValues() throws Exception {
+    public void wordToStringReturnsConcatenatedSymbols() throws Exception {
         String actualString = word.toString();
 
         String expectedString = symbols.stream()
-                .map(Symbol::getValue)
+                .map(Symbol::toString)
                 .collect(Collectors.joining());
 
         assertThat(actualString, equalTo(expectedString));

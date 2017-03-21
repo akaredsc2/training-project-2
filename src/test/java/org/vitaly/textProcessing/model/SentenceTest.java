@@ -4,15 +4,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasSize;
 
 /**
  * Created by vitaly on 20.03.17.
@@ -27,16 +28,11 @@ public class SentenceTest {
     @Before
     public void setUp() throws Exception {
         factory = new TokenFactory();
-        Token token1 = factory.createToken("a");
-        Token token2 = factory.createToken("bb");
-        Token token3 = factory.createToken(",");
-        Token token4 = factory.createToken("ccc");
-        Token token5 = factory.createToken("-");
-        Token token6 = factory.createToken("dd");
-        Token token7 = factory.createToken("e");
-        Token token8 = factory.createToken("!");
-        tokenList = new ArrayList<>();
-        Collections.addAll(tokenList, token1, token2, token3, token4, token5, token6, token7, token8);
+
+        tokenList = Stream.of("a", "bb", ",", "ccc", "-", "dd", "e", "!")
+                .map(factory::createToken)
+                .collect(Collectors.toList());
+
         sentence = new Sentence(tokenList);
         substituteToken = factory.createToken("null");
         tokenPredicate = token -> token.isWord() && token.getLength() == 2;
@@ -53,8 +49,9 @@ public class SentenceTest {
     }
 
     @Test
-    public void replaceTokensReturnsNewSentenceInstance() throws Exception {
+    public void replaceTokensReturnsNewSentenceInstanceWithSameSize() throws Exception {
         List<Token> initialSentenceTokens = sentence.getTokenList();
+        int initialSentenceSize = initialSentenceTokens.size();
 
         Sentence newSentence = sentence.replaceTokens(token -> false, factory.createToken("null"));
 
@@ -62,22 +59,12 @@ public class SentenceTest {
 
         assertThat(updatedTokens, allOf(
                 equalTo(initialSentenceTokens),
-                not(sameInstance(initialSentenceTokens))));
+                not(sameInstance(initialSentenceTokens)),
+                hasSize(initialSentenceSize)));
     }
 
     @Test
-    public void replaceTokensDoesNotChangeSentenceTokenListSize() throws Exception {
-        List<Token> initialSentenceTokens = sentence.getTokenList();
-
-        Sentence newSentence = sentence.replaceTokens(token -> true, substituteToken);
-
-        List<Token> updatedTokens = newSentence.getTokenList();
-
-        assertThat(initialSentenceTokens.size(), equalTo(updatedTokens.size()));
-    }
-
-    @Test
-    public void replacingReplacesAllMatchingTokens() throws Exception {
+    public void sentenceDoesNotContainMatchingTokensAfterReplace() throws Exception {
         List<Token> matchingTokens = sentence.getTokenList().stream()
                 .filter(tokenPredicate)
                 .collect(Collectors.toList());
@@ -87,17 +74,6 @@ public class SentenceTest {
         List<Token> updatedTokens = newSentence.getTokenList();
 
         assertThat(updatedTokens, not(contains(matchingTokens.toArray())));
-    }
-
-    @Test
-    public void replaceTokensWithMatchingPredicateDoesNotChangeOriginalSentence() throws Exception {
-        List<Token> initialSentenceTokens = sentence.getTokenList();
-
-        Sentence newSentence = sentence.replaceTokens(tokenPredicate, substituteToken);
-
-        List<Token> updatedTokens = newSentence.getTokenList();
-
-        assertThat(updatedTokens, not(equalTo(initialSentenceTokens)));
     }
 
     @Test(expected = IllegalArgumentException.class)
